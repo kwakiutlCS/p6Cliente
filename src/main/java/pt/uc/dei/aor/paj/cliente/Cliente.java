@@ -102,53 +102,50 @@ public class Cliente {
     
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
     	Cliente c = new Cliente();
-    	System.out.println("Exercicio 1");
-    	System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/users/total"));
-    	System.out.println();
     	
-    	System.out.println("Exercicio 2");
-    	System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users", new ListUserEntities(), "list", UserDetail.class));
-    	System.out.println();
+    	if (args.length == 0) {
+    		System.out.println("usage: java -jar client.jar [args]");
+    		System.out.println("details: java -jar client.jar --help");
+    		return;
+    	}
     	
-    	System.out.println("Exercicio 3");
-    	System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/101", new UserDetail(), "object", null));
-    	System.out.println();
+    	if (args[0].equals("countUsers") && args.length == 1) {
+    		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/users/total"));
+    	}
+    	else if (args[0].equals("listUsers") && args.length == 1) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users", new ListUserEntities(), "list", UserDetail.class));
+    	}
+    	else if (args[0].equals("showUser") && args.length == 2) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/"+args[1], new UserDetail(), "object", null));
+    	}
+    	else if (args[0].equals("countPlaylists") && args.length == 1) {
+    		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/playlists/total"));
+        }
+    	else if (args[0].equals("listPlaylists") && args.length == 1) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists", new ListPlaylists(), "list", AllPlaylists.class));
+        }
+    	else if ( args.length == 3 && args[0].equals("listMusics") && args[1].equals("-p")) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/musics", new ListMusicEntities(), "list", MusicDetail.class));
+        }
+    	else if ( args.length == 3 && args[0].equals("listPlaylists") && args[1].equals("-u")) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists/user/"+args[2], new ListPlaylists(), "list", AllPlaylists.class));
+        }
+    	else if (args[0].equals("countMusics") && args.length == 1) {
+    		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/musics/total"));
+        }
+    	else if ( args.length == 1 && args[0].equals("listMusics")) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics", new ListMusicEntities(), "list", MusicDetail.class));
+        }
+    	else if ( args.length == 2 && args[0].equals("showMusic")) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics/"+args[1], new MusicDetail(), "object", null));
+        }
+    	else if ( args.length == 3 && args[0].equals("listMusics") && args[1].equals("-p")) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics/user/"+args[2], new ListMusicEntities(), "list", MusicDetail.class));
+        }
+    	else if ( args.length == 2 && args[0].equals("deleteUser")) {
+    		c.delete("http://localhost:8080/p4-ws/rest/users/"+args[1]);
+        }else {
     	
-    	System.out.println("Exercicio 6");
-    	System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/playlists/total"));
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 7");
-    	System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists", new ListPlaylists(), "list", AllPlaylists.class));
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 8");
-    	System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists/101/musics", new ListMusicEntities(), "list", MusicDetail.class));
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 9");
-    	System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists/user/10", new ListPlaylists(), "list", AllPlaylists.class));
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 10");
-    	System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/musics/total"));
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 11");
-    	System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics", new ListMusicEntities(), "list", MusicDetail.class));
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 12");
-    	System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics/1", new MusicDetail(), "object", null));
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 13");
-    	System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics/user/10", new ListMusicEntities(), "list", MusicDetail.class));
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 14a");
-    	c.delete("http://localhost:8080/p4-ws/rest/users/50");
-    	System.out.println();
     	
     	System.out.println("Exercicio 14b");
     	c.post("http://localhost:8080/p4-ws/rest/users", "tonto11@p.pt", "tonto", "12345");
@@ -173,6 +170,7 @@ public class Cliente {
     	System.out.println("Exercicio 17c");
     	c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/6/add/0");
     	System.out.println();
+    	}
     }
     
     
