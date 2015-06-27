@@ -69,18 +69,22 @@ public class Cliente {
     }
 
     private void post(String urlTarget, String... args) {
-    	Entity<UserDetail> newUser = Entity.entity(new UserDetail(args[0], args[1], args[2]), MediaType.APPLICATION_XML);
+    	Form form = new Form();
+    	form.param("username", args[0]);
+    	form.param("name", args[1]);
+    	form.param("password", args[2]);
+    	Entity<Form> newUser = Entity.form(form);
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
     	Response response = tgt.request().post(newUser);
     	response.readEntity(String.class);
     }
     
     private void put(String urlTarget, String id, String password) {
-    	UserDetail user = new UserDetail();
-    	user.setId(id);
-    	user.setPassword(password);
+    	Form form = new Form();
+    	form.param("id", id);
+    	form.param("password", password);
     	
-    	Entity<UserDetail> newUser = Entity.entity(user, MediaType.APPLICATION_XML);
+    	Entity<Form> newUser = Entity.form(form);
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
     	Response response = tgt.request().put(newUser);
     	response.readEntity(String.class);
@@ -145,11 +149,11 @@ public class Cliente {
     	System.out.println();
     	
     	System.out.println("Exercicio 14b");
-    	//c.post("http://localhost:8080/p4-ws/rest/users", "tonto11@p.pt", "tonto", "12345");
+    	c.post("http://localhost:8080/p4-ws/rest/users", "tonto11@p.pt", "tonto", "12345");
     	System.out.println();
     	
     	System.out.println("Exercicio 15");
-    	//c.put("http://localhost:8080/p4-ws/rest/users/changepassword", "51", "aaaaa");
+    	c.put("http://localhost:8080/p4-ws/rest/users/changepassword", "51", "aaaaa");
     	System.out.println();
     	
     	System.out.println("Exercicio 16");
