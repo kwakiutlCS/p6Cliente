@@ -1,15 +1,15 @@
 package pt.uc.dei.aor.paj.cliente;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
 @XmlRootElement
 public class UserDetail {
-	private int id;
+	private String id;
 	private String email;
 	private String name;
-	@XmlTransient
 	private String password;
 	
 	public UserDetail() {
@@ -17,11 +17,11 @@ public class UserDetail {
 	
 	
 	
-	public UserDetail(String email, String name, int id) {
+	public UserDetail(String email, String name, String password) {
 		super();
 		this.email = email;
 		this.name = name;
-		this.id = id;
+		this.password = password;
 	}
 
 
@@ -38,11 +38,11 @@ public class UserDetail {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
-		this.id = Integer.parseInt(id);
+		this.id = id;
 	}
 	
 	
