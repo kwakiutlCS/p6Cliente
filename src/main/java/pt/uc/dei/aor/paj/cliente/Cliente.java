@@ -83,6 +83,7 @@ public class Cliente {
     	Entity<UserDetail> newUser = Entity.entity(user, MediaType.APPLICATION_XML);
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
     	Response response = tgt.request().put(newUser);
+    	response.readEntity(String.class);
     	System.out.println(response.getStatus());
     }
     
@@ -143,6 +144,10 @@ public class Cliente {
     	
     	System.out.println("Exercicio 15");
     	c.put("http://localhost:8080/p4-ws/rest/users/changepassword", "51", "aaaaa");
+    	System.out.println();
+    	
+    	System.out.println("Exercicio 16");
+    	c.delete("http://localhost:8080/p4-ws/rest/musics/user/72");
     	System.out.println();
     	
     }
