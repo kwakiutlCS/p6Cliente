@@ -87,6 +87,12 @@ public class Cliente {
     	System.out.println(response.getStatus());
     }
     
+    private void removeMusicsFromPlaylist(String urlTarget) {
+    	ResteasyWebTarget tgt = reClient.target(urlTarget);
+    	Response response = tgt.request().post(Entity.text(""));
+    	System.out.println(response.readEntity(String.class));
+    	System.out.println(response.getStatus());
+    }
     
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
     	Cliente c = new Cliente();
@@ -139,17 +145,24 @@ public class Cliente {
     	System.out.println();
     	
     	System.out.println("Exercicio 14b");
-    	c.post("http://localhost:8080/p4-ws/rest/users", "tonto11@p.pt", "tonto", "12345");
+    	//c.post("http://localhost:8080/p4-ws/rest/users", "tonto11@p.pt", "tonto", "12345");
     	System.out.println();
     	
     	System.out.println("Exercicio 15");
-    	c.put("http://localhost:8080/p4-ws/rest/users/changepassword", "51", "aaaaa");
+    	//c.put("http://localhost:8080/p4-ws/rest/users/changepassword", "51", "aaaaa");
     	System.out.println();
     	
     	System.out.println("Exercicio 16");
     	c.delete("http://localhost:8080/p4-ws/rest/musics/user/72");
     	System.out.println();
     	
+    	System.out.println("Exercicio 17a");
+    	c.removeMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/6/remove");
+    	System.out.println();
+    	
+    	System.out.println("Exercicio 17b");
+    	c.removeMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/6/remove/1");
+    	System.out.println();
     }
     
     

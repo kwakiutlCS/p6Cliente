@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
-@XmlRootElement
+@XmlRootElement(name="UserDetail")
 public class UserDetail {
 	private String id;
 	private String email;
