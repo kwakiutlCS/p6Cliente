@@ -144,33 +144,65 @@ public class Cliente {
         }
     	else if ( args.length == 2 && args[0].equals("deleteUser")) {
     		c.delete("http://localhost:8080/p4-ws/rest/users/"+args[1]);
-        }else {
+        }
+    	else if ( args.length == 3 && args[0].equals("removeMusics") && args[1].equals("-u")) {
+    		c.delete("http://localhost:8080/p4-ws/rest/musics/user/"+args[2]);
+        }
+    	else if ( args.length == 3 && args[0].equals("removeMusics") && args[1].equals("-p")) {
+    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/remove");
+        }
+    	else if ( args.length == 5 && args[0].equals("removeMusics") && args[1].equals("-p") && args[3].equals("-m")) {
+    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/remove/"+args[4]);
+        }
+    	else if ( args.length == 5 && args[0].equals("removeMusics") && args[1].equals("-m") && args[3].equals("-p")) {
+    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[4]+"/remove/"+args[2]);
+        }
+    	else if ( args.length == 5 && args[0].equals("addMusics") && args[1].equals("-m") && args[3].equals("-p")) {
+    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[4]+"/add/"+args[2]);
+        }
+    	else if ( args.length == 5 && args[0].equals("addMusics") && args[1].equals("-p") && args[3].equals("-m")) {
+    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/add/"+args[4]);
+        }
+    	else if ( args.length == 5 && args[0].equals("addUser") && args[1].equals("-e") && args[3].equals("-n")) {
+    		addUser(args[2], args[4], c);
+        }
+    	else if ( args.length == 5 && args[0].equals("addUser") && args[1].equals("-n") && args[3].equals("-e")) {
+    		addUser(args[4], args[2], c);
+        }
+    	else if ( args.length == 2 && args[0].equals("changePassword")) {
+    		java.io.Console console = System.console();
+    		String newPw;
+    		while (true) {
+    			System.out.print("password: ");
+    			newPw = new String(console.readPassword());
+    			System.out.print("confirm password: ");
+    			String confirm = new String(console.readPassword());
+    			
+    			if (newPw.equals(confirm)) break;
+    			else System.out.println("Passwords don't match");
+    		}
+    		c.put("http://localhost:8080/p4-ws/rest/users/changepassword", args[1], newPw);
+        }
     	
-    	
-    	System.out.println("Exercicio 14b");
-    	c.post("http://localhost:8080/p4-ws/rest/users", "tonto11@p.pt", "tonto", "12345");
     	System.out.println();
-    	
-    	System.out.println("Exercicio 15");
-    	c.put("http://localhost:8080/p4-ws/rest/users/changepassword", "51", "aaaaa");
     	System.out.println();
-    	
-    	System.out.println("Exercicio 16");
-    	c.delete("http://localhost:8080/p4-ws/rest/musics/user/72");
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 17a");
-    	c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/6/remove");
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 17b");
-    	c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/6/remove/1");
-    	System.out.println();
-    	
-    	System.out.println("Exercicio 17c");
-    	c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/6/add/0");
-    	System.out.println();
-    	}
+    }
+    
+    
+    private static void addUser(String email, String name, Cliente c) {
+    	java.io.Console console = System.console();
+		String newPw;
+		
+		while (true) {
+			System.out.print("password: ");
+			newPw = new String(console.readPassword());
+			System.out.print("confirm password: ");
+			String confirm = new String(console.readPassword());
+			
+			if (newPw.equals(confirm)) break;
+			else System.out.println("Passwords don't match");
+		}
+		c.post("http://localhost:8080/p4-ws/rest/users", email, name, newPw);
     }
     
     
