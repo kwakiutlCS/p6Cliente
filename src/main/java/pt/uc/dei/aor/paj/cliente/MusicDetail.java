@@ -1,5 +1,6 @@
 package pt.uc.dei.aor.paj.cliente;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,7 +70,9 @@ public class MusicDetail {
 	}
 
 	public void setDateRecord(String dateRecord) {
-		this.dateRecord = null;
+		long timestamp = Long.parseLong(dateRecord);
+		Timestamp ts = new Timestamp(timestamp);
+		this.dateRecord = new Date(ts.getTime());
 	}
 
 	public int getUserOwnerID() {
@@ -94,7 +97,7 @@ public class MusicDetail {
 		String nP = "";
 		if (nPlaylists == 0) nP="(ainda não foi adicionada a qualquer playlist)";
 		else nP="(adicionada a "+nPlaylists+" playlists)";
-		return "Nome: "+title+", Artista: "+artist+", Album: "+album+", Data: "+null+", submetida pelo utilizador com id "+userOwnerID+" "+nP;
+		return "Nome: "+title+", Artista: "+artist+", Album: "+album+", Data: "+df.format(dateRecord)+", submetida pelo utilizador com id "+userOwnerID+" "+nP;
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
@@ -27,6 +28,8 @@ import org.json.JSONObject;
 @Stateless
 @LocalBean
 public class Cliente {
+	private static final String SERVER_ERROR = "Servidor indisponível...";
+	private static final String ERROR_404 = "Página indisponível";
 	
 	private ResteasyClient reClient = new ResteasyClientBuilder().build();
 	
@@ -34,12 +37,23 @@ public class Cliente {
     }
     
     
-    private String getTextPlain(String urlTarget) {
+    public String getTextPlain(String urlTarget) {
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
+    	Response response;
     	
-    	Response response = tgt.request(MediaType.TEXT_PLAIN).get();
+    	try {
+    		response = tgt.request(MediaType.TEXT_PLAIN).get();
+    	}
+    	catch(ProcessingException e) {
+    		System.out.println(SERVER_ERROR);
+    		return null;
+    	}
+    	
     	String total = response.readEntity(String.class);
-    	if (response.getStatus() == 404) return null;
+    	if (response.getStatus() == 404) {
+    		System.out.println(ERROR_404);
+    		return null;
+    	}
     	
     	return total;
 	}
@@ -47,11 +61,20 @@ public class Cliente {
     
     private <T, U> T getJson(String urlTarget, T entity, String type, Class<U> classType) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
-    	Response response = tgt.request(MediaType.APPLICATION_JSON).get();
+    	Response response;
+    	
+    	try {
+    		response = tgt.request(MediaType.APPLICATION_JSON).get();
+    	}
+    	catch(ProcessingException e) {
+    		System.out.println(SERVER_ERROR);
+    		return null;
+    	}
     	
     	String json = response.readEntity(String.class);
     	
     	if (response.getStatus() == 404) {
+    		System.out.println(ERROR_404);
     		return null;
     	}
 
@@ -62,52 +85,91 @@ public class Cliente {
     }
     
     
-    private void delete(String urlTarget) {
+    private String delete(String urlTarget) {
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
-    	Response response = tgt.request().delete();
+    	Response response;
+    	try {
+    		response = tgt.request().delete();
+    	}
+    	catch(ProcessingException e) {
+    		System.out.println(SERVER_ERROR);
+    		return null;
+    	}
+    	if (response.getStatus() == 404) {
+    		System.out.println(ERROR_404);
+    		return null;
+    	}
     	response.readEntity(String.class);
+    	return "User removido";
     }
 
-    private void post(String urlTarget, String... args) {
+    private String post(String urlTarget, String... args) {
     	Form form = new Form();
     	form.param("username", args[0]);
     	form.param("name", args[1]);
     	form.param("password", args[2]);
     	Entity<Form> newUser = Entity.form(form);
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
-    	Response response = tgt.request().post(newUser);
+    	Response response;
+    	try {
+    		response = tgt.request().post(newUser);
+    	}
+    	catch(ProcessingException e) {
+    		System.out.println(SERVER_ERROR);
+    		return null;
+    	}
+    	if (response.getStatus() == 404) {
+    		System.out.println(ERROR_404);
+    		return null;
+    	}
     	response.readEntity(String.class);
+    	return "Operação realizada com sucesso";
     }
     
-    private void put(String urlTarget, String id, String password) {
+    private String put(String urlTarget, String id, String password) {
     	Form form = new Form();
     	form.param("id", id);
     	form.param("password", password);
     	
     	Entity<Form> newUser = Entity.form(form);
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
-    	Response response = tgt.request().put(newUser);
+    	Response response;
+    	try {
+    		response = tgt.request().put(newUser);
+    	}
+    	catch(ProcessingException e) {
+    		System.out.println(SERVER_ERROR);
+    		return null;
+    	}
+    	if (response.getStatus() == 404) {
+    		System.out.println(ERROR_404);
+    		return null;
+    	}
     	response.readEntity(String.class);
-    	System.out.println(response.getStatus());
+    	return "Operação realizada com sucesso";
     }
     
-    private void updateMusicsFromPlaylist(String urlTarget) {
+    private String updateMusicsFromPlaylist(String urlTarget) {
     	ResteasyWebTarget tgt = reClient.target(urlTarget);
-    	Response response = tgt.request().post(Entity.text(""));
-    	System.out.println(response.readEntity(String.class));
-    	System.out.println(response.getStatus());
+    	Response response;
+    	try {
+    		response = tgt.request().post(Entity.text(""));
+    	}
+    	catch (ProcessingException e) {
+    		System.out.println(SERVER_ERROR);
+    		return null;
+    	}
+    	if (response.getStatus() == 404) {
+    		System.out.println(ERROR_404);
+    		return null;
+    	}
+    	return "Operação realizada com sucesso";
     }
     
     
     
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
     	Cliente c = new Cliente();
-    	
-    	if (args.length == 0) {
-    		System.out.println("usage: java -jar client.jar [args]");
-    		System.out.println("details: java -jar client.jar --help");
-    		return;
-    	}
     	
     	if (args[0].equals("countUsers") && args.length == 1) {
     		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/users/total"));
@@ -184,6 +246,10 @@ public class Cliente {
     		c.put("http://localhost:8080/p4-ws/rest/users/changepassword", args[1], newPw);
         }
     	
+    	else {
+    		System.out.println("usage: java -jar client.jar [args]");
+        	System.out.println("details: java -jar client.jar --help");
+        }
     	System.out.println();
     	System.out.println();
     }
@@ -209,9 +275,10 @@ public class Cliente {
     private static <T> T jsonToObject(String s, T entity) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
     	JSONObject json = new JSONObject(s);
 		Map<String, String> map = BeanUtils.describe(entity);
-		
+		System.out.println(s);
 		for (String k : map.keySet()) {
 			if (!("class".equals(k))) {
+				System.out.println(k);
 				String capitalized = k.substring(0,1).toUpperCase()+k.substring(1);
 				
 				try {

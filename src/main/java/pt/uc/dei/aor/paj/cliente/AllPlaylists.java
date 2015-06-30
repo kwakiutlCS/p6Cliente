@@ -1,6 +1,6 @@
 package pt.uc.dei.aor.paj.cliente;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,8 +47,9 @@ public class AllPlaylists {
 		return insertDate;
 	}
 	public void setInsertDate(String insertDate) {
-		this.insertDate = null;
-		
+		long timestamp = Long.parseLong(insertDate);
+		Timestamp ts = new Timestamp(timestamp);
+		this.insertDate = new Date(ts.getTime());
 	}
 	public int getUserOwnerID() {
 		return userOwnerID;
@@ -62,7 +63,7 @@ public class AllPlaylists {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		return "Playlist:\n"
 		+ "Nome: "+name+"\n"
-		+ "Data de criação: "+df+"\n"
+		+ "Data de criação: "+df.format(insertDate)+"\n"
 		+ "(Criado pelo utilizador com ID "+userOwnerID+")";
 	}
 
@@ -75,6 +76,7 @@ public class AllPlaylists {
 	}
 
 
+	
 
 
 
