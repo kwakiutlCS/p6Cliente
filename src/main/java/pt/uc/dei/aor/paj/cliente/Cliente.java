@@ -28,8 +28,8 @@ import org.json.JSONObject;
 @Stateless
 @LocalBean
 public class Cliente {
-	private static final String SERVER_ERROR = "Servidor indispon�vel...";
-	private static final String ERROR_404 = "P�gina indispon�vel";
+	private static final String SERVER_ERROR = "Servidor indisponivel...";
+	private static final String ERROR_404 = "Recurso inexistente...";
 	
 	private ResteasyClient reClient = new ResteasyClientBuilder().build();
 	
@@ -163,73 +163,74 @@ public class Cliente {
     		System.out.println(ERROR_404);
     		return null;
     	}
-    	return "Opera��o realizada com sucesso";
+    	return "Operação realizada com sucesso";
     }
     
     
     
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
     	Cliente c = new Cliente();
+    	Object answer = null;
     	
     	if (args.length == 1 && args[0].equals("countUsers")) {
-    		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/users/total"));
+    		answer = c.getTextPlain("http://localhost:8080/p4-ws/rest/users/total");
     	}
     	else if (args.length == 2 && args[0].equals("countUsers") && args[1].equals("-l")) {
-    		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/users/logged/total"));
+    		answer = c.getTextPlain("http://localhost:8080/p4-ws/rest/users/logged/total");
     	}
     	else if (args.length == 1 && args[0].equals("listUsers")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users", new ListUserEntities(), "list", UserDetail.class));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/users", new ListUserEntities(), "list", UserDetail.class);
     	}
     	else if (args.length == 2 && args[0].equals("listUsers") && args[1].equals("-l")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/logged", new ListUserEntities(), "list", UserDetail.class));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/users/logged", new ListUserEntities(), "list", UserDetail.class);
     	}
     	else if (args.length == 2 && args[0].equals("showUser")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/get/"+args[1], new UserDetail(), "object", null));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/users/get/"+args[1], new UserDetail(), "object", null);
     	}
     	else if (args.length == 1 && args[0].equals("countPlaylists")) {
-    		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/playlists/total"));
+    		answer = c.getTextPlain("http://localhost:8080/p4-ws/rest/playlists/total");
         }
     	else if (args.length == 1 && args[0].equals("listPlaylists")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists", new ListPlaylists(), "list", AllPlaylists.class));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/playlists", new ListPlaylists(), "list", AllPlaylists.class);
         }
     	else if ( args.length == 3 && args[0].equals("listMusics") && args[1].equals("-p")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/musics", new ListMusicEntities(), "list", MusicDetail.class));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/musics", new ListMusicEntities(), "list", MusicDetail.class);
         }
     	else if ( args.length == 3 && args[0].equals("listPlaylists") && args[1].equals("-u")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists/user/"+args[2], new ListPlaylists(), "list", AllPlaylists.class));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/playlists/user/"+args[2], new ListPlaylists(), "list", AllPlaylists.class);
         }
     	else if (args.length == 1 && args[0].equals("countMusics")) {
-    		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/musics/total"));
+    		answer = c.getTextPlain("http://localhost:8080/p4-ws/rest/musics/total");
         }
     	else if ( args.length == 1 && args[0].equals("listMusics")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics", new ListMusicEntities(), "list", MusicDetail.class));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/musics", new ListMusicEntities(), "list", MusicDetail.class);
         }
     	else if ( args.length == 2 && args[0].equals("showMusic")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics/"+args[1], new MusicDetail(), "object", null));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/musics/"+args[1], new MusicDetail(), "object", null);
         }
     	else if ( args.length == 3 && args[0].equals("listMusics") && args[1].equals("-u")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics/user/"+args[2], new ListMusicEntities(), "list", MusicDetail.class));
+    		answer = c.getJson("http://localhost:8080/p4-ws/rest/musics/user/"+args[2], new ListMusicEntities(), "list", MusicDetail.class);
         }
     	else if ( args.length == 2 && args[0].equals("deleteUser")) {
-    		c.delete("http://localhost:8080/p4-ws/rest/users/"+args[1]);
+    		answer = c.delete("http://localhost:8080/p4-ws/rest/users/"+args[1]);
         }
     	else if ( args.length == 3 && args[0].equals("removeMusics") && args[1].equals("-u")) {
-    		c.delete("http://localhost:8080/p4-ws/rest/musics/user/"+args[2]);
+    		answer = c.delete("http://localhost:8080/p4-ws/rest/musics/user/"+args[2]);
         }
     	else if ( args.length == 3 && args[0].equals("removeMusics") && args[1].equals("-p")) {
-    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/remove");
+    		answer = c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/remove");
         }
     	else if ( args.length == 5 && args[0].equals("removeMusics") && args[1].equals("-p") && args[3].equals("-m")) {
-    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/remove/"+args[4]);
+    		answer = c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/remove/"+args[4]);
         }
     	else if ( args.length == 5 && args[0].equals("removeMusics") && args[1].equals("-m") && args[3].equals("-p")) {
-    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[4]+"/remove/"+args[2]);
+    		answer = c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[4]+"/remove/"+args[2]);
         }
     	else if ( args.length == 5 && args[0].equals("addMusics") && args[1].equals("-m") && args[3].equals("-p")) {
-    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[4]+"/add/"+args[2]);
+    		answer = c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[4]+"/add/"+args[2]);
         }
     	else if ( args.length == 5 && args[0].equals("addMusics") && args[1].equals("-p") && args[3].equals("-m")) {
-    		c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/add/"+args[4]);
+    		answer = c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/add/"+args[4]);
         }
     	else if ( args.length == 5 && args[0].equals("addUser") && args[1].equals("-e") && args[3].equals("-n")) {
     		addUser(args[2], args[4], c);
@@ -258,6 +259,9 @@ public class Cliente {
     		System.out.println("usage: java -jar client.jar [args]");
         	System.out.println("details: java -jar client.jar --help");
         }
+    	
+    	if (answer != null) System.out.println(answer);
+    	
     	System.out.println();
     	System.out.println();
     }

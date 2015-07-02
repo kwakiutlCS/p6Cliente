@@ -23,7 +23,7 @@ public class ListPlaylists {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		StringBuilder sb = new StringBuilder();
 		for (AllPlaylists ap:listOfPlaylists) {
-			sb.append("Nome: "+ap.getName()+", Data: "+df.format(ap.getInsertDate())+", do utilizador com ID: "+ap.getUserOwnerID()+"\n");
+			sb.append("Id: "+ap.getId()+", Nome: "+ap.getName()+", Data: "+df.format(ap.getInsertDate())+", do utilizador com ID: "+ap.getUserOwnerID()+"\n");
 		}
 		return sb.toString();
 	}

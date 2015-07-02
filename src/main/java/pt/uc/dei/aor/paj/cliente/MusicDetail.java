@@ -94,10 +94,7 @@ public class MusicDetail {
 	@Override
 	public String toString() {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		String nP = "";
-		if (nPlaylists == 0) nP="(ainda não foi adicionada a qualquer playlist)";
-		else nP="(adicionada a "+nPlaylists+" playlists)";
-		return "Nome: "+title+", Artista: "+artist+", Album: "+album+", Data: "+df.format(dateRecord)+", submetida pelo utilizador com id "+userOwnerID+" "+nP;
+		return "Nome: "+title+", Artista: "+artist+", Album: "+album+", Data: "+df.format(dateRecord)+", submetida pelo utilizador com id "+userOwnerID;
 	}
 
 }

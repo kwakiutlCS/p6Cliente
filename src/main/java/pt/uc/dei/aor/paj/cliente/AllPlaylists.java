@@ -62,6 +62,7 @@ public class AllPlaylists {
 	public String toString() {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		return "Playlist:\n"
+		+ "Id: "+id+"\n"
 		+ "Nome: "+name+"\n"
 		+ "Data de criação: "+df.format(insertDate)+"\n"
 		+ "(Criado pelo utilizador com ID "+userOwnerID+")";

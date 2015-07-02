@@ -27,7 +27,7 @@ public class ListUserEntities {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (UserDetail ue : listOfUsers) {
-			sb.append("Nome: "+ue.getEmail()+" (ID="+ue.getId()+")\n");
+			sb.append("Email: "+ue.getEmail()+" (ID="+ue.getId()+")\n");
 		}
 		return sb.toString();
 	}
