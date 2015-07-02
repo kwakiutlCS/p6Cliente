@@ -171,19 +171,25 @@ public class Cliente {
     public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
     	Cliente c = new Cliente();
     	
-    	if (args[0].equals("countUsers") && args.length == 1) {
+    	if (args.length == 1 && args[0].equals("countUsers")) {
     		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/users/total"));
     	}
-    	else if (args[0].equals("listUsers") && args.length == 1) {
+    	else if (args.length == 2 && args[0].equals("countUsers") && args[1].equals("-l")) {
+    		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/users/logged/total"));
+    	}
+    	else if (args.length == 1 && args[0].equals("listUsers")) {
     		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users", new ListUserEntities(), "list", UserDetail.class));
     	}
-    	else if (args[0].equals("showUser") && args.length == 2) {
+    	else if (args.length == 2 && args[0].equals("listUsers") && args[1].equals("-l")) {
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/logged", new ListUserEntities(), "list", UserDetail.class));
+    	}
+    	else if (args.length == 2 && args[0].equals("showUser")) {
     		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/"+args[1], new UserDetail(), "object", null));
     	}
-    	else if (args[0].equals("countPlaylists") && args.length == 1) {
+    	else if (args.length == 1 && args[0].equals("countPlaylists")) {
     		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/playlists/total"));
         }
-    	else if (args[0].equals("listPlaylists") && args.length == 1) {
+    	else if (args.length == 1 && args[0].equals("listPlaylists")) {
     		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists", new ListPlaylists(), "list", AllPlaylists.class));
         }
     	else if ( args.length == 3 && args[0].equals("listMusics") && args[1].equals("-p")) {
@@ -192,7 +198,7 @@ public class Cliente {
     	else if ( args.length == 3 && args[0].equals("listPlaylists") && args[1].equals("-u")) {
     		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/playlists/user/"+args[2], new ListPlaylists(), "list", AllPlaylists.class));
         }
-    	else if (args[0].equals("countMusics") && args.length == 1) {
+    	else if (args.length == 1 && args[0].equals("countMusics")) {
     		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/musics/total"));
         }
     	else if ( args.length == 1 && args[0].equals("listMusics")) {
@@ -245,7 +251,9 @@ public class Cliente {
     		}
     		c.put("http://localhost:8080/p4-ws/rest/users/changepassword", args[1], newPw);
         }
-    	
+    	else if (args.length == 1 && args[0].equals("--help")) {
+    		showHelp();
+    	}
     	else {
     		System.out.println("usage: java -jar client.jar [args]");
         	System.out.println("details: java -jar client.jar --help");
@@ -278,7 +286,6 @@ public class Cliente {
 		System.out.println(s);
 		for (String k : map.keySet()) {
 			if (!("class".equals(k))) {
-				System.out.println(k);
 				String capitalized = k.substring(0,1).toUpperCase()+k.substring(1);
 				
 				try {
@@ -316,5 +323,19 @@ public class Cliente {
 		}
 		
 		return entity;
+    }
+    
+    
+    private static void showHelp() {
+    	System.out.println("options:");
+    	System.out.println();
+    	System.out.println("countUsers  ->  shows number of users");
+    	System.out.println("extra options: -l -> logged users");
+    	System.out.println();
+    	System.out.println("countPlaylists ->  shows number of playlists");
+    	System.out.println();
+    	System.out.println("countMusics  ->  shows number of musics");
+    	System.out.println();
+    	
     }
 }
