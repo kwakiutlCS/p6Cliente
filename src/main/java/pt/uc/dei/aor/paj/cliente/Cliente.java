@@ -28,8 +28,8 @@ import org.json.JSONObject;
 @Stateless
 @LocalBean
 public class Cliente {
-	private static final String SERVER_ERROR = "Servidor indisponível...";
-	private static final String ERROR_404 = "Página indisponível";
+	private static final String SERVER_ERROR = "Servidor indisponï¿½vel...";
+	private static final String ERROR_404 = "Pï¿½gina indisponï¿½vel";
 	
 	private ResteasyClient reClient = new ResteasyClientBuilder().build();
 	
@@ -123,7 +123,7 @@ public class Cliente {
     		return null;
     	}
     	response.readEntity(String.class);
-    	return "Operação realizada com sucesso";
+    	return "OperaÃ§Ã£o realizada com sucesso";
     }
     
     private String put(String urlTarget, String id, String password) {
@@ -146,7 +146,7 @@ public class Cliente {
     		return null;
     	}
     	response.readEntity(String.class);
-    	return "Operação realizada com sucesso";
+    	return "OperaÃ§Ã£o realizada com sucesso";
     }
     
     private String updateMusicsFromPlaylist(String urlTarget) {
@@ -163,7 +163,7 @@ public class Cliente {
     		System.out.println(ERROR_404);
     		return null;
     	}
-    	return "Operação realizada com sucesso";
+    	return "Operaï¿½ï¿½o realizada com sucesso";
     }
     
     
@@ -184,7 +184,7 @@ public class Cliente {
     		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/logged", new ListUserEntities(), "list", UserDetail.class));
     	}
     	else if (args.length == 2 && args[0].equals("showUser")) {
-    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/"+args[1], new UserDetail(), "object", null));
+    		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/users/get/"+args[1], new UserDetail(), "object", null));
     	}
     	else if (args.length == 1 && args[0].equals("countPlaylists")) {
     		System.out.println(c.getTextPlain("http://localhost:8080/p4-ws/rest/playlists/total"));
@@ -207,7 +207,7 @@ public class Cliente {
     	else if ( args.length == 2 && args[0].equals("showMusic")) {
     		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics/"+args[1], new MusicDetail(), "object", null));
         }
-    	else if ( args.length == 3 && args[0].equals("listMusics") && args[1].equals("-p")) {
+    	else if ( args.length == 3 && args[0].equals("listMusics") && args[1].equals("-u")) {
     		System.out.println(c.getJson("http://localhost:8080/p4-ws/rest/musics/user/"+args[2], new ListMusicEntities(), "list", MusicDetail.class));
         }
     	else if ( args.length == 2 && args[0].equals("deleteUser")) {
@@ -283,7 +283,7 @@ public class Cliente {
     private static <T> T jsonToObject(String s, T entity) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
     	JSONObject json = new JSONObject(s);
 		Map<String, String> map = BeanUtils.describe(entity);
-		System.out.println(s);
+		
 		for (String k : map.keySet()) {
 			if (!("class".equals(k))) {
 				String capitalized = k.substring(0,1).toUpperCase()+k.substring(1);
@@ -330,11 +330,32 @@ public class Cliente {
     	System.out.println("options:");
     	System.out.println();
     	System.out.println("countUsers  ->  shows number of users");
-    	System.out.println("extra options: -l -> logged users");
+    	System.out.println("extra options: -l -> only logged users");
     	System.out.println();
     	System.out.println("countPlaylists ->  shows number of playlists");
     	System.out.println();
     	System.out.println("countMusics  ->  shows number of musics");
+    	System.out.println();
+    	System.out.println("listUsers  ->  list the users");
+    	System.out.println("extra options: -l -> only logged users");
+    	System.out.println();
+    	System.out.println("showUser [id]  ->  shows user details");
+    	System.out.println();
+    	System.out.println("listPlaylists  ->  list the playlists");
+    	System.out.println("extra options: -u [id] -> filters playlists by user");
+    	System.out.println();
+    	System.out.println("listMusics  ->  list the musics");
+    	System.out.println("extra options: -p [id] -> filters musics by playlists");
+    	System.out.println("extra options: -u [id] -> filters musics by user");
+    	System.out.println();
+    	System.out.println("showMusic [id]  ->  shows music details");
+    	System.out.println();
+    	System.out.println("deleteUser [id]  ->  removes user");
+    	System.out.println();
+    	System.out.println("removeMusics  ->  remove musics from playlists or users");
+    	System.out.println("extra options: -p [id] -> filters musics by playlists");
+    	System.out.println("extra options: -p [id] -m [id] -> filters musics by playlists and musicId");
+    	System.out.println("extra options: -u [id] -> filters musics by user");
     	System.out.println();
     	
     }

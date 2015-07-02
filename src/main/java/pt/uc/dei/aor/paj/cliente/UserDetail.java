@@ -10,18 +10,16 @@ public class UserDetail {
 	private String id;
 	private String email;
 	private String name;
-	private String password;
 	
 	public UserDetail() {
 	}
 	
 	
 	
-	public UserDetail(String email, String name, String password) {
+	public UserDetail(String email, String name) {
 		super();
 		this.email = email;
 		this.name = name;
-		this.password = password;
 	}
 
 
@@ -54,19 +52,5 @@ public class UserDetail {
 						+ "Nome: "+name+"\n"
 								+ "(ID: "+id+")";
 	}
-
-
-
-	public String getPassword() {
-		return password;
-	}
-
-
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
 
 }
