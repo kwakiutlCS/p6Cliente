@@ -233,10 +233,10 @@ public class Cliente {
     		answer = c.updateMusicsFromPlaylist("http://localhost:8080/p4-ws/rest/playlists/"+args[2]+"/add/"+args[4]);
         }
     	else if ( args.length == 5 && args[0].equals("addUser") && args[1].equals("-e") && args[3].equals("-n")) {
-    		addUser(args[2], args[4], c);
+    		answer = addUser(args[2], args[4], c);
         }
     	else if ( args.length == 5 && args[0].equals("addUser") && args[1].equals("-n") && args[3].equals("-e")) {
-    		addUser(args[4], args[2], c);
+    		answer = addUser(args[4], args[2], c);
         }
     	else if ( args.length == 2 && args[0].equals("changePassword")) {
     		java.io.Console console = System.console();
@@ -250,7 +250,7 @@ public class Cliente {
     			if (newPw.equals(confirm)) break;
     			else System.out.println("Passwords don't match");
     		}
-    		c.put("http://localhost:8080/p4-ws/rest/users/changepassword", args[1], newPw);
+    		answer = c.put("http://localhost:8080/p4-ws/rest/users/changepassword", args[1], newPw);
         }
     	else if (args.length == 1 && args[0].equals("--help")) {
     		showHelp();
@@ -267,7 +267,7 @@ public class Cliente {
     }
     
     
-    private static void addUser(String email, String name, Cliente c) {
+    private static String addUser(String email, String name, Cliente c) {
     	java.io.Console console = System.console();
 		String newPw;
 		
@@ -280,7 +280,7 @@ public class Cliente {
 			if (newPw.equals(confirm)) break;
 			else System.out.println("Passwords don't match");
 		}
-		c.post("http://localhost:8080/p4-ws/rest/users", email, name, newPw);
+		return c.post("http://localhost:8080/p4-ws/rest/users", email, name, newPw);
     }
     
     
@@ -356,11 +356,23 @@ public class Cliente {
     	System.out.println();
     	System.out.println("deleteUser [id]  ->  removes user");
     	System.out.println();
+    	System.out.println("addUser  ->  adds user");
+    	System.out.println("options: -e [arg] -> email");
+    	System.out.println("options: -n [arg] -> username");
+    	System.out.println();
     	System.out.println("removeMusics  ->  remove musics from playlists or users");
     	System.out.println("extra options: -p [id] -> filters musics by playlists");
     	System.out.println("extra options: -p [id] -m [id] -> filters musics by playlists and musicId");
     	System.out.println("extra options: -u [id] -> filters musics by user");
     	System.out.println();
+    	System.out.println("changePassword  [id] ->  changes user password");
+    	System.out.println();
+    	System.out.println("addMusics  ->  add musics to playlists");
+    	System.out.println("options: -p [id] -> playlist");
+    	System.out.println();
+    	System.out.println("--help  ->  this screen");
+    	System.out.println();
+    	
     	
     }
 }

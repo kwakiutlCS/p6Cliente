@@ -38,7 +38,7 @@ public class ListMusicEntities {
 			String owner = "";
 			if (md.getUserOwnerID() == 0) owner = "sem proprietário";
 			else owner = "submetida pelo utilizador com id "+md.getUserOwnerID();
-			sb.append("Id: "+md.getId()+", Nome: "+md.getTitle()+", Artista: "+md.getArtist()+", Album: "+md.getAlbum()+", Data: "+date+", "+owner+"\n");
+			sb.append("Id: "+md.getId()+", Nome: "+md.getTitle()+", Artista: "+md.getArtist()+", Album: "+md.getAlbum()+", Data: "+date+"\n");
 		}
 		return sb.toString();
 	}
