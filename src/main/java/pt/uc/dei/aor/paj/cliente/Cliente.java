@@ -122,7 +122,8 @@ public class Cliente {
     		System.out.println(ERROR_404);
     		return null;
     	}
-    	response.readEntity(String.class);
+    	String result = response.readEntity(String.class);
+    	if (result.equals("error")) return "Não é possível";
     	return "Operação realizada com sucesso";
     }
     
